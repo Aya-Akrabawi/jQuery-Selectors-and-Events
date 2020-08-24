@@ -1,26 +1,29 @@
 "use strict";
-let select = $('select')
+let select = $("select");
 
-$.ajax("./data/page-1.json").then(data => {
-
+$.ajax("./data/page-1.json").then((data) => {
   data.forEach((item) => {
-    let newObject = new Unicorn(item.image_url, item.description, item.keyword, item.horns);
+    let newObject = new Unicorn(
+      item.image_url,
+      item.description,
+      item.keyword,
+      item.horns
+    );
     allUnicorns.push(newObject);
-    newObject.render()
-
+    newObject.render();
   });
 
-  filter(allUnicorns)
+  filter(allUnicorns);
   $("main section").first().remove();
 });
 
-var allUnicorns = []
+var allUnicorns = [];
 
 function Unicorn(image_url, description, keyword, horns) {
-  this.image_url = image_url
-  this.description = description
-  this.keyword = keyword
-  this.horns = horns
+  this.image_url = image_url;
+  this.description = description;
+  this.keyword = keyword;
+  this.horns = horns;
 }
 Unicorn.prototype.render = function () {
   let clonedSection = $(".rendering").clone();
@@ -30,36 +33,33 @@ Unicorn.prototype.render = function () {
     .attr("src", this.image_url)
     .attr("alt", this.title);
   let p = clonedSection.find("p").text(this.description);
-  clonedSection.attr("class", "rendered" );
+  clonedSection.attr("class", "rendered");
   clonedSection.attr("data-keyword", this.keyword);
 
   // clonedSection.data('keyword',item.keyword);
 
   $("main").append(clonedSection);
+};
 
-}
-
- function filter(mohamad) {
+function filter(mohamad) {
   let setUnique = new Set();
-  mohamad.forEach((item)=>{
-    setUnique.add(item.keyword)
-})
+  mohamad.forEach((item) => {
+    setUnique.add(item.keyword);
+  });
   setUnique.forEach((item) => {
     let option = $(`<option value = ${item}>${item}</option>`);
     select.append(option);
-  })
+  });
 }
 
 $(select).change(() => {
-
-  $('section').removeClass('d-none');
-  let val = $("select option:selected").attr('value');
-  if (val !== 'default') {
-    let targetedElements = $(`section:not(section[data-keyword= ${val}])`).find('section').addClass('d-none');
+  $("section").removeClass("d-none");
+  let val = $("select option:selected").attr("value");
+  if (val !== "default") {
+    let targetedElements = $(`section:not(section[data-keyword= ${val}])`).find(
+      "section"
+    );
+    targetedElements = targetedElements.prevObject;
+    targetedElements.addClass("d-none");
   }
-
 });
-
-
-
-
